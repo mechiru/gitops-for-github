@@ -1,0 +1,16 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - releases/*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm run all

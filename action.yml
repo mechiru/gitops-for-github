@@ -1,0 +1,25 @@
+name: gitops-for-github 
+description: 'GitOps for GitHub(Beta)'
+author: mechiru
+inputs:
+  organization:
+    description: GitHub organization name
+    required: true
+  token:
+    description: GitHub API token
+    required: true
+  file:
+    description: Config file path
+    required: true
+  dry-run:
+    description:
+    required: false
+    default: false
+outputs:
+  invite:
+    description: JSON string array of invited users
+  remove:
+    description: JSON string array of removed users
+runs:
+  using: node12
+  main: dist/index.js

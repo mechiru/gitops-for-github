@@ -29,6 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v2
       - uses: mechiru/gitops-for-github@master
         with:
           organization: your-organization-name

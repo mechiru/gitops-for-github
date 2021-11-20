@@ -1,10 +1,10 @@
 import * as core from '@actions/core';
+import {PaginateInterface, paginateRest} from '@octokit/plugin-paginate-rest';
 import {Octokit} from '@octokit/core';
-import {paginateRest, PaginateInterface} from '@octokit/plugin-paginate-rest';
 import {throttling} from '@octokit/plugin-throttling';
 import {readFileSync} from 'fs';
 import {jsonc} from 'jsonc';
-import * as yaml from 'yaml';
+import {parse} from 'yaml';
 
 // https://docs.github.com/en/rest/reference
 type MyOctokit = Octokit & {paginate: PaginateInterface};
@@ -36,7 +36,7 @@ export type Member = Readonly<{
 
 async function listMembers(octokit: MyOctokit, org: string): Promise<string[]> {
   const resp = await octokit.paginate('GET /orgs/{org}/members', {org, per_page: 100});
-  return resp.filter(x => x != null).map(x => x!.login);
+  return resp.filter(x => x != null).map(x => x.login);
 }
 
 async function inviteMembers(
@@ -150,7 +150,7 @@ export async function readConfigFile(path: string): Promise<Config> {
   switch (extension(path)) {
     case 'yml':
     case 'yaml':
-      return yaml.parse(file) as Config;
+      return parse(file) as Config;
     case undefined:
     case 'json':
     case 'jsonc':

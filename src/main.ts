@@ -147,15 +147,17 @@ export function extension(path: string): string | undefined {
 export async function readConfigFile(path: string): Promise<Config> {
   const file = readFileSync(path, {encoding: 'utf8'}); // TODO: fs/promise.readFile
   core.debug(`config: ${file}`);
-  switch (extension(path)) {
+
+  const ext = extension(path);
+  switch (ext) {
     case 'yml':
     case 'yaml':
       return parse(file) as Config;
-    case undefined:
     case 'json':
     case 'jsonc':
-    default:
       return jsonc.parse(file) as Config;
+    default:
+      throw new Error(`input file is not y(a)ml or json(c) format: paht=${path}, ext={ext}`);
   }
 }
 

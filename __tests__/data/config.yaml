@@ -1,0 +1,7 @@
+members:
+  # comment1
+  - login: mechiru
+    email: mechiru@mechiru.test
+  # comment2
+  - login: mechiru2
+    email: mechiru2@mechiru.test

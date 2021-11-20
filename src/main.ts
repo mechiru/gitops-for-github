@@ -3,6 +3,8 @@ import {Octokit} from '@octokit/core';
 import {paginateRest, PaginateInterface} from '@octokit/plugin-paginate-rest';
 import {throttling} from '@octokit/plugin-throttling';
 import {readFileSync} from 'fs';
+import {jsonc} from 'jsonc';
+import * as yaml from 'yaml';
 
 // https://docs.github.com/en/rest/reference
 type MyOctokit = Octokit & {paginate: PaginateInterface};
@@ -23,11 +25,11 @@ function parseInput(): Input {
   };
 }
 
-type Config = Readonly<{
+export type Config = Readonly<{
   members: Member[];
 }>;
 
-type Member = Readonly<{
+export type Member = Readonly<{
   login: string;
   email: string;
 }>;
@@ -138,10 +140,27 @@ export function diff(desired: string[], current: string[]): [string[], string[]]
   return [add, Array.from(set)];
 }
 
-async function inner(input: Input): Promise<Readonly<{invite: string[]; remove: string[]}>> {
-  const file = readFileSync(input.file, {encoding: 'utf8'}); // TODO: fs/promise.readFile
-  const config = JSON.parse(file) as Config;
+export function extension(path: string): string | undefined {
+  return path.split('.').pop();
+}
+
+export async function readConfigFile(path: string): Promise<Config> {
+  const file = readFileSync(path, {encoding: 'utf8'}); // TODO: fs/promise.readFile
   core.debug(`config: ${file}`);
+  switch (extension(path)) {
+    case 'yml':
+    case 'yaml':
+      return yaml.parse(file) as Config;
+    case undefined:
+    case 'json':
+    case 'jsonc':
+    default:
+      return jsonc.parse(file) as Config;
+  }
+}
+
+async function inner(input: Input): Promise<Readonly<{invite: string[]; remove: string[]}>> {
+  const config = await readConfigFile(input.file);
 
   const octokit: MyOctokit = new (Octokit.plugin(paginateRest, throttling))({
     auth: input.token,
@@ -197,7 +216,9 @@ async function run(): Promise<void> {
     core.setOutput('invite', invite);
     core.setOutput('remove', remove);
   } catch (error) {
-    core.setFailed(`message: ${error.message}\nstack: ${error.stack}`);
+    if (error instanceof Error) {
+      core.setFailed(`message: ${error.message}\nstack: ${error.stack}`);
+    }
   }
 }
 

@@ -27,7 +27,9 @@
     "@actions/core": "^1.6.0",
     "@octokit/core": "^3.5.1",
     "@octokit/plugin-paginate-rest": "^2.17.0",
-    "@octokit/plugin-throttling": "^3.5.2"
+    "@octokit/plugin-throttling": "^3.5.2",
+    "jsonc": "^2.0.0",
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",

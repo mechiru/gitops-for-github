@@ -8,6 +8,7 @@
       "project": "./tsconfig.json"
     },
     "rules": {
+      "i18n-text/no-en": "off",
       "eslint-comments/no-use": "off",
       "import/no-namespace": "off",
       "no-unused-vars": "off",
@@ -29,7 +30,7 @@
       "@typescript-eslint/no-inferrable-types": "error",
       "@typescript-eslint/no-misused-new": "error",
       "@typescript-eslint/no-namespace": "error",
-      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/no-non-null-assertion": "warn",
       "@typescript-eslint/no-unnecessary-qualifier": "error",
       "@typescript-eslint/no-unnecessary-type-assertion": "error",
       "@typescript-eslint/no-useless-constructor": "error",
@@ -45,11 +46,14 @@
       "@typescript-eslint/semi": "off",
       "@typescript-eslint/type-annotation-spacing": "error",
       "@typescript-eslint/unbound-method": "error",
-      "no-shadow": "off"
+      "no-shadow": "off",
+      // TODO: fix
+      "import/named": "warn",
+      "sort-imports": "warn"
     },
     "env": {
       "node": true,
       "es6": true,
       "jest/globals": true
     }
-  }
+}

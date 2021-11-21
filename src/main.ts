@@ -145,7 +145,9 @@ export function extension(path: string): string | undefined {
 }
 
 export async function readConfigFile(path: string): Promise<Config> {
-  const file = readFileSync(path, {encoding: 'utf8'}); // TODO: fs/promise.readFile
+  // TODO: fs/promise.readFile
+  // see https://github.com/actions/virtual-environments/issues/4446
+  const file = readFileSync(path, {encoding: 'utf8'});
   core.debug(`config: ${file}`);
 
   const ext = extension(path);

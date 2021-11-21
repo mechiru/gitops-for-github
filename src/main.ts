@@ -4,7 +4,7 @@ import {Octokit} from '@octokit/core';
 import {throttling} from '@octokit/plugin-throttling';
 import {readFileSync} from 'fs';
 import {parse as parseJsonc} from 'jsonc-parser';
-import {parse as parseYaml} from 'yaml';
+import {load as parseYaml} from 'js-yaml';
 
 // https://docs.github.com/en/rest/reference
 type MyOctokit = Octokit & {paginate: PaginateInterface};

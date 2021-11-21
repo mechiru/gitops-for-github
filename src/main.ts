@@ -3,8 +3,8 @@ import {PaginateInterface, paginateRest} from '@octokit/plugin-paginate-rest';
 import {Octokit} from '@octokit/core';
 import {throttling} from '@octokit/plugin-throttling';
 import {readFileSync} from 'fs';
-import {jsonc} from 'jsonc';
-import {parse} from 'yaml';
+import {parse as parseJsonc} from 'jsonc-parser';
+import {parse as parseYaml} from 'yaml';
 
 // https://docs.github.com/en/rest/reference
 type MyOctokit = Octokit & {paginate: PaginateInterface};
@@ -152,10 +152,10 @@ export async function readConfigFile(path: string): Promise<Config> {
   switch (ext) {
     case 'yml':
     case 'yaml':
-      return parse(file) as Config;
+      return parseYaml(file) as Config;
     case 'json':
     case 'jsonc':
-      return jsonc.parse(file) as Config;
+      return parseJsonc(file) as Config;
     default:
       throw new Error(`input file is not y(a)ml or json(c) format: paht=${path}, ext={ext}`);
   }

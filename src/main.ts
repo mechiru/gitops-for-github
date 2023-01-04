@@ -21,7 +21,7 @@ function parseInput(): Input {
     organization: core.getInput('organization'),
     file: core.getInput('file'),
     token: core.getInput('token'),
-    dryRun: core.getInput('dry-run') === 'true'
+    dryRun: core.getBooleanInput('dry-run'),
   };
 }
 
